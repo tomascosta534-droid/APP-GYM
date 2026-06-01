@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Mi Rutina">
-<meta name="theme-color" content="#E8580A">
+<meta name="theme-color" content="#1F5673">
 <title>Mi Rutina</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --orange:#E8580A;--orange-dark:#B84008;--orange-light:#FDE9D9;
+  --orange:#1F5673;--orange-dark:#16425A;--orange-light:#E4EDF2;
   --bg:#0F0F0F;--bg2:#1A1A1A;--bg3:#242424;--bg4:#2E2E2E;
   --text:#F0EDE8;--text2:#A09890;--text3:#6A6460;
   --border:#2E2E2E;--border2:#3A3A3A;
@@ -54,6 +54,43 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .week-opt{padding:12px 4px;border:1px solid var(--border2);border-radius:var(--radius-sm);text-align:center;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);background:var(--bg3);transition:all .15s}
 .week-opt.active{background:var(--orange);border-color:var(--orange);color:#fff}
 
+/* EDIT ROUTINE BUTTON */
+.edit-routine-btn{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:500;color:var(--orange);font-family:'DM Sans',sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.edit-routine-btn:active{background:var(--bg3)}
+
+/* EDITOR MODAL */
+.editor-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:none;flex-direction:column}
+.editor-overlay.open{display:flex}
+.editor-panel{display:flex;flex-direction:column;height:100%;height:100dvh;max-width:680px;margin:0 auto;width:100%;background:var(--bg)}
+.editor-header{display:flex;align-items:center;padding:env(safe-area-inset-top,12px) 16px 12px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg2)}
+.editor-header h3{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--text);flex:1}
+.editor-close{width:32px;height:32px;border:none;background:var(--bg3);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.editor-close svg{width:18px;height:18px;stroke:var(--text2);fill:none;stroke-width:2;stroke-linecap:round}
+.editor-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px}
+.editor-body::-webkit-scrollbar{display:none}
+.editor-footer{flex-shrink:0;display:flex;gap:8px;padding:12px 16px calc(env(safe-area-inset-bottom,12px) + 12px);border-top:1px solid var(--border);background:var(--bg2)}
+.editor-btn-primary{flex:1;padding:13px;background:var(--orange);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer}
+.editor-btn-primary:active{background:var(--orange-dark)}
+.editor-btn-secondary{flex:1;padding:13px;background:var(--bg3);color:var(--text2);border:1px solid var(--border2);border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer}
+.ed-day{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden}
+.ed-day-head{padding:12px 14px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.ed-day-head input{flex:1;background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:7px 9px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;font-weight:600}
+.ed-day-head input:focus{outline:none;border-color:var(--orange)}
+.ed-day-label{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--orange);letter-spacing:.5px;white-space:nowrap}
+.ed-ex{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:flex-start}
+.ed-ex:last-child{border-bottom:none}
+.ed-ex-fields{flex:1;display:flex;flex-direction:column;gap:6px}
+.ed-ex-fields input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:7px 9px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif}
+.ed-ex-fields input:focus{outline:none;border-color:var(--orange)}
+.ed-ex-row{display:flex;gap:6px}
+.ed-ex-row input{flex:1}
+.ed-ex-del{width:30px;height:30px;border:none;background:rgba(231,112,112,.15);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.ed-ex-del svg{width:15px;height:15px;stroke:#E87070;fill:none;stroke-width:2;stroke-linecap:round}
+.ed-add-ex{width:100%;padding:9px;background:transparent;border:1px dashed var(--border2);border-radius:6px;color:var(--text2);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;margin:8px 0}
+.ed-add-ex:active{background:var(--bg3)}
+.ed-field-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.ed-warn{font-size:11px;color:var(--text3);padding:8px 12px;line-height:1.5}
+
 /* DAY CARDS */
 .day-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden}
 .day-header{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
@@ -71,13 +108,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .warmup-block h4{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:8px}
 .chips{display:flex;flex-wrap:wrap;gap:5px}
 .chip{font-size:11px;padding:3px 8px;border-radius:20px;border:1px solid var(--border2);color:var(--text2);background:var(--bg4)}
-.chip-abs{background:rgba(232,88,10,.12);border-color:rgba(232,88,10,.25);color:#F09A6A}
+.chip-abs{background:rgba(31,86,115,.12);border-color:rgba(31,86,115,.30);color:#5B92AD}
 
 /* EXERCISE */
 .exercise{border-bottom:1px solid var(--border);padding:14px 16px}
 .exercise:last-child{border-bottom:none}
 .ex-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;display:flex;align-items:flex-start;gap:6px;flex-wrap:wrap}
-.ex-tag{font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(232,88,10,.15);color:var(--orange);font-weight:500;white-space:nowrap;margin-top:1px}
+.ex-tag{font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(31,86,115,.15);color:var(--orange);font-weight:500;white-space:nowrap;margin-top:1px}
 .ex-meta{font-size:11px;color:var(--text2);margin-bottom:10px}
 
 .ex-inputs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
@@ -101,7 +138,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 
 /* REST TIMER */
 .rest-btn{margin-left:auto;display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:5px 10px;cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent;transition:all .15s}
-.rest-btn.running{background:rgba(232,88,10,.15);border-color:rgba(232,88,10,.4);color:var(--orange)}
+.rest-btn.running{background:rgba(31,86,115,.15);border-color:rgba(31,86,115,.4);color:var(--orange)}
 .rest-btn.done-rest{background:rgba(76,175,80,.15);border-color:rgba(76,175,80,.3);color:#6FCF76}
 .rest-icon{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
@@ -111,7 +148,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .ex-notes::placeholder{color:var(--text3)}
 
 /* AEROBICO */
-.aerobico-bar{background:rgba(232,88,10,.08);border-top:1px solid rgba(232,88,10,.2);padding:10px 16px;text-align:center;font-size:11px;color:var(--orange);font-weight:500}
+.aerobico-bar{background:rgba(31,86,115,.08);border-top:1px solid rgba(31,86,115,.2);padding:10px 16px;text-align:center;font-size:11px;color:var(--orange);font-weight:500}
 
 /* PROGRESO PAGE */
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
@@ -254,8 +291,25 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
   </div>
 </div>
 
+<!-- EDITOR MODAL -->
+<div class="editor-overlay" id="editorModal">
+  <div class="editor-panel">
+    <div class="editor-header">
+      <h3>EDITAR RUTINA</h3>
+      <button class="editor-close" onclick="closeEditor()">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="editor-body" id="editorBody"></div>
+    <div class="editor-footer">
+      <button class="editor-btn-secondary" onclick="resetRoutine()">Restaurar plantilla base</button>
+      <button class="editor-btn-primary" onclick="saveEditorChanges()">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const DAYS = [
+const DEFAULT_DAYS = [
   {
     id:'d1', name:'Día 1', muscle:'Pecho · Bíceps · Trapecios',
     warmup:['Rotación de tórax x10','Rechazo escapular x12','Rotación de hombros x12','Nados trasnuca x12','Rotadores con banda x15'],
@@ -319,14 +373,25 @@ const DAYS = [
 
 const MEDIDAS = ['Peso (kg)','Hombros (cm)','Pecho (cm)','Bíceps relajado (cm)','Bíceps contraído (cm)','Cintura (cm)','Glúteos (cm)','Cuádriceps (cm)','Gemelos (cm)'];
 
+// DAYS arranca como copia de la plantilla por defecto, pero se puede editar y guardar
+let DAYS = JSON.parse(JSON.stringify(DEFAULT_DAYS));
+
 let state = { week:1, openDays:{d1:true}, data:{}, medidas:{} };
 let restTimers = {};
 
 function load(){
-  try{const s=localStorage.getItem('pg16');if(s){const p=JSON.parse(s);state.data=p.data||{};state.medidas=p.medidas||{};}}catch(e){}
+  try{
+    const s=localStorage.getItem('pg16');
+    if(s){const p=JSON.parse(s);state.data=p.data||{};state.medidas=p.medidas||{};}
+    const r=localStorage.getItem('pg16_routine');
+    if(r){const rd=JSON.parse(r);if(Array.isArray(rd)&&rd.length){DAYS=rd;}}
+  }catch(e){}
 }
 function save(){
   try{localStorage.setItem('pg16',JSON.stringify({data:state.data,medidas:state.medidas}));}catch(e){}
+}
+function saveRoutine(){
+  try{localStorage.setItem('pg16_routine',JSON.stringify(DAYS));}catch(e){}
 }
 function gk(w,d,e,f){return `${w}|${d}|${e}|${f}`;}
 function gd(w,d,e,f,def=''){return state.data[gk(w,d,e,f)]??def;}
@@ -360,10 +425,86 @@ function openWeekModal(){
 }
 function closeWeekModal(e){if(!e||e.target===document.getElementById('weekModal')) document.getElementById('weekModal').classList.remove('open');}
 
+// ─── EDITOR DE RUTINA ───
+let editorDraft = null;
+
+function openEditor(){
+  editorDraft = JSON.parse(JSON.stringify(DAYS));
+  renderEditor();
+  document.getElementById('editorModal').classList.add('open');
+}
+function closeEditor(){
+  document.getElementById('editorModal').classList.remove('open');
+  editorDraft = null;
+}
+
+function renderEditor(){
+  const body=document.getElementById('editorBody');
+  let html='<p class="ed-warn">Editá nombres, grupos musculares, ejercicios, series, reps y descanso. Los cambios se guardan en tu teléfono.</p>';
+  editorDraft.forEach((day,di)=>{
+    html+=`<div class="ed-day">
+      <div class="ed-day-head">
+        <span class="ed-day-label">${day.name.toUpperCase()}</span>
+        <input value="${(day.muscle||'').replace(/"/g,'&quot;')}" placeholder="Grupo muscular" oninput="editorDraft[${di}].muscle=this.value">
+      </div>`;
+    day.exercises.forEach((ex,ei)=>{
+      html+=`<div class="ed-ex">
+        <div class="ed-ex-fields">
+          <div><div class="ed-field-label">Ejercicio</div><input value="${(ex.name||'').replace(/"/g,'&quot;')}" placeholder="Nombre del ejercicio" oninput="editorDraft[${di}].exercises[${ei}].name=this.value"></div>
+          <div class="ed-ex-row">
+            <div style="flex:1"><div class="ed-field-label">Series</div><input value="${ex.series||''}" placeholder="4" oninput="editorDraft[${di}].exercises[${ei}].series=this.value"></div>
+            <div style="flex:2"><div class="ed-field-label">Reps</div><input value="${(ex.reps||'').replace(/"/g,'&quot;')}" placeholder="12-10-8" oninput="editorDraft[${di}].exercises[${ei}].reps=this.value"></div>
+            <div style="flex:1"><div class="ed-field-label">Desc. (s)</div><input type="number" value="${ex.rest||''}" placeholder="60" oninput="editorDraft[${di}].exercises[${ei}].rest=parseInt(this.value)||60"></div>
+          </div>
+          <div><div class="ed-field-label">Etiqueta (opcional)</div><input value="${(ex.tag||'').replace(/"/g,'&quot;')}" placeholder="Dropset / Bi-serie..." oninput="editorDraft[${di}].exercises[${ei}].tag=this.value"></div>
+        </div>
+        <button class="ed-ex-del" onclick="delEx(${di},${ei})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+      </div>`;
+    });
+    html+=`<div style="padding:0 12px"><button class="ed-add-ex" onclick="addEx(${di})">+ Agregar ejercicio</button></div>`;
+    html+=`</div>`;
+  });
+  body.innerHTML=html;
+}
+
+function addEx(di){
+  const newId='ex_'+Date.now()+'_'+Math.floor(Math.random()*1000);
+  editorDraft[di].exercises.push({id:newId,name:'',series:'3',reps:'12',rest:60,tag:''});
+  renderEditor();
+  const body=document.getElementById('editorBody');
+  body.scrollTop=body.scrollHeight;
+}
+
+function delEx(di,ei){
+  editorDraft[di].exercises.splice(ei,1);
+  renderEditor();
+}
+
+function saveEditorChanges(){
+  // Validar: sacar ejercicios sin nombre
+  editorDraft.forEach(day=>{
+    day.exercises=day.exercises.filter(ex=>ex.name && ex.name.trim()!=='');
+    day.exercises.forEach(ex=>{ if(!ex.series||ex.series.trim()==='') ex.series='1'; });
+  });
+  DAYS = JSON.parse(JSON.stringify(editorDraft));
+  saveRoutine();
+  closeEditor();
+  renderRutina();
+}
+
+function resetRoutine(){
+  if(confirm('¿Restaurar la rutina a la plantilla base? Se perderán los ejercicios que hayas editado (no se borran tus pesos ni medidas).')){
+    DAYS = JSON.parse(JSON.stringify(DEFAULT_DAYS));
+    saveRoutine();
+    closeEditor();
+    renderRutina();
+  }
+}
+
 // RING SVG
 function ring(pct){
   const r=18,c=2*Math.PI*r,off=c*(1-pct/100);
-  const col=pct===100?'#4CAF50':'#E8580A';
+  const col=pct===100?'#4CAF50':'#1F5673';
   return `<div class="ring-wrap"><svg class="ring-svg" width="44" height="44" viewBox="0 0 44 44"><circle class="ring-track" cx="22" cy="22" r="${r}"/><circle class="ring-prog" cx="22" cy="22" r="${r}" stroke="${col}" stroke-dasharray="${c}" stroke-dashoffset="${off}"/></svg><div class="ring-text${pct===100?' done':''}">${pct}%</div></div>`;
 }
 
@@ -381,6 +522,13 @@ function getDayPct(w,day){
 function renderRutina(){
   const c=document.getElementById('page-rutina');
   c.innerHTML='';
+  const editBar=document.createElement('div');
+  editBar.style.cssText='display:flex;justify-content:flex-end;margin-bottom:8px';
+  editBar.innerHTML=`<button class="edit-routine-btn" onclick="openEditor()">
+    <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    Editar rutina
+  </button>`;
+  c.appendChild(editBar);
   DAYS.forEach(day=>{
     const open=!!state.openDays[day.id];
     const pct=getDayPct(state.week,day);
