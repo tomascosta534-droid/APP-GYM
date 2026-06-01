@@ -117,27 +117,33 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .ex-tag{font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(31,86,115,.15);color:var(--orange);font-weight:500;white-space:nowrap;margin-top:1px}
 .ex-meta{font-size:11px;color:var(--text2);margin-bottom:10px}
 
-.ex-inputs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+/* SETS LIST (peso por serie) */
+.sets-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.set-line{display:flex;align-items:center;gap:8px}
+.set-num{width:30px;height:34px;border-radius:var(--radius-xs);border:1.5px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--text3);background:var(--bg3);transition:all .15s;-webkit-tap-highlight-color:transparent;flex-shrink:0}
+.set-done .set-num{background:var(--orange);border-color:var(--orange);color:#fff}
+.set-num:active{transform:scale(.92)}
+.set-rep{font-size:11px;color:var(--text2);width:56px;flex-shrink:0}
+.set-weight{flex:1;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-xs);padding:8px 10px;font-size:14px;font-weight:500;color:var(--text);font-family:'DM Sans',sans-serif;-webkit-appearance:none;appearance:none;min-width:0}
+.set-weight:focus{outline:none;border-color:var(--orange)}
+.set-weight::placeholder{color:var(--text3)}
+.set-done .set-weight{border-color:rgba(31,86,115,.4)}
+.prev-weight{font-size:10px;padding:3px 7px;border-radius:10px;white-space:nowrap;flex-shrink:0;font-weight:500}
+.prev-same{background:var(--bg4);color:var(--text2)}
+.prev-up{background:rgba(76,175,80,.15);color:#6FCF76}
+.prev-dn{background:rgba(231,112,112,.15);color:#E87070}
+
 .inp-group{display:flex;flex-direction:column;gap:4px}
 .inp-group label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text3)}
 .inp-group input{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-xs);padding:9px 10px;font-size:14px;font-weight:500;color:var(--text);font-family:'DM Sans',sans-serif;width:100%;-webkit-appearance:none;appearance:none}
 .inp-group input:focus{outline:none;border-color:var(--orange)}
 .inp-group input::placeholder{color:var(--text3)}
 
-.diff-badge{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
-.diff-up{background:rgba(76,175,80,.15);color:#6FCF76}
-.diff-dn{background:rgba(231,76,60,.15);color:#E87070}
-
-/* SET TRACKER */
-.sets-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.sets-label{font-size:11px;color:var(--text2)}
-.set-circles{display:flex;gap:5px}
-.set-dot{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--text3);background:var(--bg3);transition:all .15s;-webkit-tap-highlight-color:transparent}
-.set-dot.done{background:var(--orange);border-color:var(--orange);color:#fff}
-.set-dot:active{transform:scale(.9)}
+.ex-bottom{display:flex;align-items:flex-end;gap:8px;margin-bottom:10px}
+.inp-time{flex:1}
 
 /* REST TIMER */
-.rest-btn{margin-left:auto;display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:5px 10px;cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.rest-btn{display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:8px 12px;cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent;transition:all .15s;flex-shrink:0}
 .rest-btn.running{background:rgba(31,86,115,.15);border-color:rgba(31,86,115,.4);color:var(--orange)}
 .rest-btn.done-rest{background:rgba(76,175,80,.15);border-color:rgba(76,175,80,.3);color:#6FCF76}
 .rest-icon{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
@@ -146,6 +152,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .ex-notes{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-xs);padding:8px 10px;font-size:12px;color:var(--text2);font-family:'DM Sans',sans-serif;width:100%;resize:none;min-height:36px}
 .ex-notes:focus{outline:none;border-color:var(--orange);color:var(--text)}
 .ex-notes::placeholder{color:var(--text3)}
+
+/* COPIAR SEMANA */
+.copy-week-btn{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:500;color:var(--text2);font-family:'DM Sans',sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.copy-week-btn:active{background:var(--bg3)}
+.copy-week-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* BACKUP BANNER */
+.backup-banner{background:rgba(31,86,115,.12);border:1px solid rgba(31,86,115,.3);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:10px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text)}
+.backup-banner svg{width:18px;height:18px;stroke:var(--orange);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.backup-banner button{margin-left:auto;background:var(--orange);color:#fff;border:none;border-radius:6px;padding:6px 12px;font-size:11px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;flex-shrink:0}
+.backup-banner .bb-close{background:transparent;color:var(--text3);padding:6px 8px}
 
 /* AEROBICO */
 .aerobico-bar{background:rgba(31,86,115,.08);border-top:1px solid rgba(31,86,115,.2);padding:10px 16px;text-align:center;font-size:11px;color:var(--orange);font-weight:500}
@@ -393,6 +410,38 @@ function save(){
 function saveRoutine(){
   try{localStorage.setItem('pg16_routine',JSON.stringify(DAYS));}catch(e){}
 }
+
+// Copiar pesos de la semana anterior a la actual
+function copyPrevWeek(){
+  const w=state.week;
+  if(w<=1) return;
+  if(!confirm(`¿Copiar todos los pesos de la Semana ${w-1} a la Semana ${w}? Los pesos que ya cargaste en esta semana se sobrescriben.`)) return;
+  DAYS.forEach(day=>{
+    day.exercises.forEach(ex=>{
+      const s=parseInt(ex.series)||1;
+      for(let i=0;i<s;i++){
+        const prev=gd(w-1,day.id,ex.id,'p'+i,'');
+        if(prev!=='') sd(w,day.id,ex.id,'p'+i,prev);
+      }
+    });
+  });
+  renderRutina();
+}
+
+// Backup reminder
+function shouldShowBackup(){
+  try{
+    if(localStorage.getItem('pg16_backup_dismiss')==='1') return false;
+    const last=localStorage.getItem('pg16_last_backup');
+    // Solo mostrar si hay datos cargados
+    if(Object.keys(state.data).length<5) return false;
+    if(!last) return true;
+    const days=(Date.now()-parseInt(last))/(1000*60*60*24);
+    return days>=14;
+  }catch(e){return false;}
+}
+function markBackup(){try{localStorage.setItem('pg16_last_backup',String(Date.now()));localStorage.removeItem('pg16_backup_dismiss');}catch(e){}renderRutina();}
+function dismissBackup(){try{localStorage.setItem('pg16_backup_dismiss','1');}catch(e){}renderRutina();}
 function gk(w,d,e,f){return `${w}|${d}|${e}|${f}`;}
 function gd(w,d,e,f,def=''){return state.data[gk(w,d,e,f)]??def;}
 function sd(w,d,e,f,v){state.data[gk(w,d,e,f)]=v;save();}
@@ -522,13 +571,23 @@ function getDayPct(w,day){
 function renderRutina(){
   const c=document.getElementById('page-rutina');
   c.innerHTML='';
-  const editBar=document.createElement('div');
-  editBar.style.cssText='display:flex;justify-content:flex-end;margin-bottom:8px';
-  editBar.innerHTML=`<button class="edit-routine-btn" onclick="openEditor()">
-    <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-    Editar rutina
-  </button>`;
-  c.appendChild(editBar);
+  // Banner de backup (cada 14 días sin exportar)
+  const backupHtml = shouldShowBackup() ? `<div class="backup-banner">
+    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    <span>Hace tiempo que no respaldás tus datos.</span>
+    <button onclick="exportData();markBackup()">Exportar</button>
+    <button class="bb-close" onclick="dismissBackup()">✕</button>
+  </div>` : '';
+
+  const topBar=document.createElement('div');
+  topBar.innerHTML = backupHtml + `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px">
+    ${state.week>1?`<button class="copy-week-btn" onclick="copyPrevWeek()"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copiar pesos de Semana ${state.week-1}</button>`:'<span></span>'}
+    <button class="edit-routine-btn" onclick="openEditor()">
+      <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Editar rutina
+    </button>
+  </div>`;
+  c.appendChild(topBar);
   DAYS.forEach(day=>{
     const open=!!state.openDays[day.id];
     const pct=getDayPct(state.week,day);
@@ -557,30 +616,44 @@ function renderRutina(){
 function renderEx(dayId,ex){
   const w=state.week,e=ex.id,d=dayId;
   const s=parseInt(ex.series)||1;
-  const peso=gd(w,d,e,'peso','');
   const tiempo=gd(w,d,e,'tiempo','');
   const nota=gd(w,d,e,'nota','');
-  const prev=w>1?gd(w-1,d,e,'peso',''):'';
-  let diff='';
-  if(prev&&peso){const dv=parseFloat(peso)-parseFloat(prev);if(dv>0) diff=`<span class="diff-badge diff-up">↑ +${dv.toFixed(1)}kg</span>`;else if(dv<0) diff=`<span class="diff-badge diff-dn">↓ ${dv.toFixed(1)}kg</span>`;}
-  let dots='';
-  for(let i=0;i<s;i++){const done=gd(w,d,e,'s'+i,'0')==='1';dots+=`<div class="set-dot${done?' done':''}" ontouchstart="" onclick="toggleSet('${d}','${e}',${i},this)">${i+1}</div>`;}
+  // Parse reps por serie (ej "15-12-10-8" => [15,12,10,8])
+  const repsArr=(ex.reps||'').split(/[-/]/).map(r=>r.trim());
+
+  // Filas de series: cada una con su peso, reps objetivo, peso semana anterior y check
+  let setsHtml='';
+  for(let i=0;i<s;i++){
+    const peso=gd(w,d,e,'p'+i,'');
+    const prevPeso=w>1?gd(w-1,d,e,'p'+i,''):'';
+    const done=gd(w,d,e,'s'+i,'0')==='1';
+    const repTarget=repsArr.length===1?repsArr[0]:(repsArr[i]||repsArr[repsArr.length-1]||'');
+    let prevTag='';
+    if(prevPeso){
+      let cls='prev-same';
+      if(peso){const dv=parseFloat(peso)-parseFloat(prevPeso);cls=dv>0?'prev-up':dv<0?'prev-dn':'prev-same';}
+      prevTag=`<span class="prev-weight ${cls}">ant: ${prevPeso}kg</span>`;
+    }
+    setsHtml+=`<div class="set-line${done?' set-done':''}">
+      <div class="set-num" onclick="toggleSet('${d}','${e}',${i},this)">${done?'✓':(i+1)}</div>
+      <div class="set-rep">${repTarget?repTarget+' reps':''}</div>
+      <input class="set-weight" type="number" inputmode="decimal" step="0.5" placeholder="kg" value="${peso}" onchange="sd(${w},'${d}','${e}','p${i}',this.value);renderRutina()">
+      ${prevTag}
+    </div>`;
+  }
+
   return `<div class="exercise">
-    <div class="ex-name">${ex.name}${ex.tag?`<span class="ex-tag">${ex.tag}</span>`:''}${diff}</div>
+    <div class="ex-name">${ex.name}${ex.tag?`<span class="ex-tag">${ex.tag}</span>`:''}</div>
     <div class="ex-meta">${ex.series} series · ${ex.reps}</div>
-    <div class="ex-inputs">
-      <div class="inp-group"><label>Peso (kg)</label><input type="number" inputmode="decimal" step="0.5" placeholder="—" value="${peso}" onchange="sd(${w},'${d}','${e}','peso',this.value);refreshDiff('${d}','${e}')"></div>
-      <div class="inp-group"><label>Tiempo (seg)</label><input type="number" inputmode="numeric" step="1" placeholder="—" value="${tiempo}" onchange="sd(${w},'${d}','${e}','tiempo',this.value)"></div>
-    </div>
-    <div class="sets-row">
-      <span class="sets-label">Series:</span>
-      <div class="set-circles">${dots}</div>
+    <div class="sets-list">${setsHtml}</div>
+    <div class="ex-bottom">
+      <div class="inp-group inp-time"><label>Tiempo total (seg)</label><input type="number" inputmode="numeric" step="1" placeholder="—" value="${tiempo}" onchange="sd(${w},'${d}','${e}','tiempo',this.value)"></div>
       <button class="rest-btn" id="rb_${d}_${e}" ontouchstart="" onclick="startRest('${d}','${e}',${ex.rest})">
         <svg class="rest-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         <span id="rt_${d}_${e}">${ex.rest}s</span>
       </button>
     </div>
-    <textarea class="ex-notes" rows="1" placeholder="Notas de la serie..." onchange="sd(${w},'${d}','${e}','nota',this.value)">${nota}</textarea>
+    <textarea class="ex-notes" rows="1" placeholder="Notas del ejercicio..." onchange="sd(${w},'${d}','${e}','nota',this.value)">${nota}</textarea>
   </div>`;
 }
 
@@ -594,15 +667,7 @@ function toggleSet(dayId,exId,idx,el){
   const cur=gd(w,dayId,exId,'s'+idx,'0');
   const nv=cur==='1'?'0':'1';
   sd(w,dayId,exId,'s'+idx,nv);
-  el.classList.toggle('done',nv==='1');
-  // update ring
-  const day=DAYS.find(d=>d.id===dayId);
-  if(day){
-    const pct=getDayPct(w,day);
-    const card=el.closest('.day-card');
-    const rw=card.querySelector('.ring-wrap');
-    if(rw) rw.outerHTML=ring(pct); // replace ring
-  }
+  renderRutina();
 }
 
 function refreshDiff(dayId,exId){renderRutina();}
@@ -634,13 +699,32 @@ function startRest(dayId,exId,total){
 }
 
 // PROGRESO
+// Peso representativo de un ejercicio en una semana = el peso máximo entre sus series
+function exMaxWeight(w,dayId,ex){
+  const s=parseInt(ex.series)||1;
+  let max=0;
+  for(let i=0;i<s;i++){
+    const p=parseFloat(gd(w,dayId,ex.id,'p'+i,''));
+    if(p>0 && p>max) max=p;
+  }
+  return max;
+}
+// Lista de pesos por serie como texto, ej "15·20·22·25"
+function exWeightsText(w,dayId,ex){
+  const s=parseInt(ex.series)||1;
+  const arr=[];
+  for(let i=0;i<s;i++){const p=gd(w,dayId,ex.id,'p'+i,'');arr.push(p||'-');}
+  const hasAny=arr.some(x=>x!=='-');
+  return hasAny?arr.join('·'):'-';
+}
+
 function renderProgreso(){
   const w=state.week;
   let tot=0,done=0,kgSum=0,kgCnt=0;
   DAYS.forEach(day=>day.exercises.forEach(ex=>{
     const s=parseInt(ex.series)||1;
     for(let i=0;i<s;i++){tot++;if(gd(w,day.id,ex.id,'s'+i,'0')==='1') done++;}
-    const p=parseFloat(gd(w,day.id,ex.id,'peso',''));
+    const p=exMaxWeight(w,day.id,ex);
     if(p>0){kgSum+=p;kgCnt++;}
   }));
   const pct=tot>0?Math.round(done/tot*100):0;
@@ -649,7 +733,7 @@ function renderProgreso(){
   let avgs=[],maxA=0;
   for(let wk=1;wk<=5;wk++){
     let s=0,c=0;
-    DAYS.forEach(day=>day.exercises.forEach(ex=>{const p=parseFloat(gd(wk,day.id,ex.id,'peso',''));if(p>0){s+=p;c++;}}));
+    DAYS.forEach(day=>day.exercises.forEach(ex=>{const p=exMaxWeight(wk,day.id,ex);if(p>0){s+=p;c++;}}));
     const a=c>0?parseFloat((s/c).toFixed(1)):0;
     avgs.push(a);
     if(a>maxA) maxA=a;
@@ -668,8 +752,8 @@ function renderProgreso(){
     day.exercises.forEach(ex=>{
       exTable+=`<tr><td>${ex.name}</td>`;
       for(let wk=1;wk<=5;wk++){
-        const p=gd(wk,day.id,ex.id,'peso','');
-        exTable+=`<td>${p?p:'-'}</td>`;
+        const p=exMaxWeight(wk,day.id,ex);
+        exTable+=`<td>${p>0?p:'-'}</td>`;
       }
       exTable+=`</tr>`;
     });
@@ -717,17 +801,18 @@ function renderHistorial(){
   for(let wk=5;wk>=1;wk--){
     let rows='';let cnt=0;
     DAYS.forEach(day=>day.exercises.forEach(ex=>{
-      const p=gd(wk,day.id,ex.id,'peso','');
+      const wtext=exWeightsText(wk,day.id,ex);
+      const pmax=exMaxWeight(wk,day.id,ex);
       const t=gd(wk,day.id,ex.id,'tiempo','');
       const n=gd(wk,day.id,ex.id,'nota','');
       let done=0;const s=parseInt(ex.series)||1;
       for(let i=0;i<s;i++) if(gd(wk,day.id,ex.id,'s'+i,'0')==='1') done++;
-      if(p||t||n||done>0){
+      if(wtext!=='-'||t||n||done>0){
         cnt++;
-        const prev=wk>1?gd(wk-1,day.id,ex.id,'peso',''):'';
+        const prevMax=wk>1?exMaxWeight(wk-1,day.id,ex):0;
         let diff='';
-        if(prev&&p){const dv=parseFloat(p)-parseFloat(prev);if(dv>0) diff=`<span class="diff-badge diff-up">+${dv.toFixed(1)}</span>`;else if(dv<0) diff=`<span class="diff-badge diff-dn">${dv.toFixed(1)}</span>`;}
-        rows+=`<tr><td>${ex.name}</td><td>${p?p+' kg':'-'} ${diff}</td><td>${t?t+'s':'-'}</td><td>${done}/${s}</td><td>${n||'-'}</td></tr>`;
+        if(prevMax>0&&pmax>0){const dv=pmax-prevMax;if(dv>0) diff=`<span class="diff-badge diff-up">+${dv.toFixed(1)}</span>`;else if(dv<0) diff=`<span class="diff-badge diff-dn">${dv.toFixed(1)}</span>`;}
+        rows+=`<tr><td>${ex.name}</td><td>${wtext!=='-'?wtext+' kg':'-'} ${diff}</td><td>${t?t+'s':'-'}</td><td>${done}/${s}</td><td>${n||'-'}</td></tr>`;
       }
     }));
     if(cnt>0){
@@ -809,7 +894,8 @@ function exportData(){
     version:'pg16',
     exportDate:new Date().toISOString(),
     data:state.data,
-    medidas:state.medidas
+    medidas:state.medidas,
+    routine:DAYS
   };
   const json=JSON.stringify(payload,null,2);
   const blob=new Blob([json],{type:'application/json'});
@@ -822,6 +908,7 @@ function exportData(){
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+  try{localStorage.setItem('pg16_last_backup',String(Date.now()));localStorage.removeItem('pg16_backup_dismiss');}catch(e){}
   const msg=document.getElementById('exportMsg');
   if(msg){msg.textContent='✓ Archivo descargado correctamente';setTimeout(()=>msg.textContent='',3000);}
 }
@@ -836,6 +923,7 @@ function importData(event){
       if(!p.data) throw new Error('Archivo inválido');
       state.data=p.data||{};
       state.medidas=p.medidas||{};
+      if(Array.isArray(p.routine)&&p.routine.length){DAYS=p.routine;saveRoutine();}
       save();
       const msg=document.getElementById('importMsg');
       if(msg){msg.className='ajustes-msg ok';msg.textContent='✓ Datos importados correctamente';}
