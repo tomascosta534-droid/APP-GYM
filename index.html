@@ -190,6 +190,25 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .prog-table tr:last-child td{border-bottom:none}
 .prog-day-label{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.5px;color:var(--text3);margin:12px 0 6px;padding:0 2px}
 
+/* PROGRESO MEJORADO */
+.prog-select{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-xs);padding:10px 12px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;font-weight:500;margin-bottom:12px;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23A09890' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center}
+.prog-select:focus{outline:none;border-color:var(--orange)}
+.evo-pr-badge{font-size:13px;color:var(--text);background:var(--bg3);border-radius:var(--radius-xs);padding:8px 12px;margin-bottom:10px}
+.evo-pr-badge strong{color:var(--orange)}
+.evo-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.evo-table{width:100%;border-collapse:collapse;font-size:12px;min-width:280px}
+.evo-table th{text-align:center;padding:7px 4px;color:var(--text3);font-weight:600;border-bottom:1px solid var(--border2);font-size:11px}
+.evo-table th:first-child{text-align:left;width:60px}
+.evo-table td{padding:8px 4px;text-align:center;color:var(--text);border-bottom:1px solid var(--border);font-size:13px;font-weight:500}
+.evo-table .evo-set{text-align:left;color:var(--text2);font-size:11px;font-weight:400}
+.evo-table tr:last-child td{border-bottom:none}
+.evo-pr{background:rgba(31,86,115,.25);color:#7FB5CC;font-weight:700;border-radius:4px}
+.evo-maxrow td{border-top:1.5px solid var(--border2);color:var(--orange);font-weight:600}
+.evo-maxrow .evo-set{color:var(--orange);font-weight:600}
+.evo-note{font-size:11px;color:var(--text3);margin-top:8px;line-height:1.5}
+.pr-val{color:var(--orange)!important;font-weight:600;text-align:right;font-size:13px!important}
+.pr-week{color:var(--text3)!important;text-align:right;width:50px;font-size:11px!important}
+
 /* MEDIDAS */
 .medidas-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .med-item{display:flex;flex-direction:column;gap:4px}
@@ -718,61 +737,160 @@ function exWeightsText(w,dayId,ex){
   return hasAny?arr.join('·'):'-';
 }
 
+// Estado: ejercicio seleccionado para análisis
+let progExSel = null; // {dayId, exId}
+
+// Récord personal de un ejercicio: mayor peso registrado en cualquier serie/semana
+function exPR(dayId,ex){
+  let pr=0, prWeek=0;
+  for(let wk=1;wk<=5;wk++){
+    const s=parseInt(ex.series)||1;
+    for(let i=0;i<s;i++){
+      const p=parseFloat(gd(wk,dayId,ex.id,'p'+i,''));
+      if(p>0 && p>pr){pr=p;prWeek=wk;}
+    }
+  }
+  return {pr,prWeek};
+}
+
+function selectProgEx(dayId,exId){
+  progExSel={dayId,exId};
+  renderProgreso();
+}
+
 function renderProgreso(){
   const w=state.week;
-  let tot=0,done=0,kgSum=0,kgCnt=0;
+
+  // ── Stats de la semana actual ──
+  let tot=0,done=0;
   DAYS.forEach(day=>day.exercises.forEach(ex=>{
     const s=parseInt(ex.series)||1;
     for(let i=0;i<s;i++){tot++;if(gd(w,day.id,ex.id,'s'+i,'0')==='1') done++;}
-    const p=exMaxWeight(w,day.id,ex);
-    if(p>0){kgSum+=p;kgCnt++;}
   }));
   const pct=tot>0?Math.round(done/tot*100):0;
-  const avgKg=kgCnt>0?(kgSum/kgCnt).toFixed(1):'-';
 
-  let avgs=[],maxA=0;
-  for(let wk=1;wk<=5;wk++){
-    let s=0,c=0;
-    DAYS.forEach(day=>day.exercises.forEach(ex=>{const p=exMaxWeight(wk,day.id,ex);if(p>0){s+=p;c++;}}));
-    const a=c>0?parseFloat((s/c).toFixed(1)):0;
-    avgs.push(a);
-    if(a>maxA) maxA=a;
+  // Volumen total de la semana (peso × reps × series completadas, aprox usando reps objetivo)
+  function weekVolume(wk){
+    let vol=0;
+    DAYS.forEach(day=>day.exercises.forEach(ex=>{
+      const s=parseInt(ex.series)||1;
+      const repsArr=(ex.reps||'').split(/[-/]/).map(r=>parseInt(r.trim())||0);
+      for(let i=0;i<s;i++){
+        const p=parseFloat(gd(wk,day.id,ex.id,'p'+i,''));
+        if(p>0){
+          const reps=repsArr.length===1?(repsArr[0]||0):(repsArr[i]||repsArr[repsArr.length-1]||0);
+          vol+=p*reps;
+        }
+      }
+    }));
+    return Math.round(vol);
   }
+  const volNow=weekVolume(w);
 
-  let bars='';
-  avgs.forEach((a,i)=>{
-    const h=maxA>0?Math.round(a/maxA*68):0;
-    bars+=`<div class="bar-group"><div class="bar-val">${a>0?a:''}</div><div class="bar-wrap"><div class="bar" style="height:${a>0?Math.max(h,4):2}px"></div></div><div class="bar-lbl">S${i+1}</div></div>`;
+  // ── Selector de ejercicio: armar opciones ──
+  let exOptions='';
+  DAYS.forEach(day=>{
+    day.exercises.forEach(ex=>{
+      const sel = progExSel && progExSel.dayId===day.id && progExSel.exId===ex.id;
+      exOptions+=`<option value="${day.id}|${ex.id}" ${sel?'selected':''}>${day.name} · ${ex.name}</option>`;
+    });
   });
 
-  let exTable='';
-  DAYS.forEach(day=>{
-    exTable+=`<p class="prog-day-label">${day.name.toUpperCase()} · ${day.muscle}</p>`;
-    exTable+=`<table class="prog-table"><thead><tr><th>Ejercicio</th><th>S1</th><th>S2</th><th>S3</th><th>S4</th><th>S5</th></tr></thead><tbody>`;
-    day.exercises.forEach(ex=>{
-      exTable+=`<tr><td>${ex.name}</td>`;
-      for(let wk=1;wk<=5;wk++){
-        const p=exMaxWeight(wk,day.id,ex);
-        exTable+=`<td>${p>0?p:'-'}</td>`;
+  // Default: primer ejercicio si no hay selección
+  if(!progExSel && DAYS[0] && DAYS[0].exercises[0]){
+    progExSel={dayId:DAYS[0].id,exId:DAYS[0].exercises[0].id};
+  }
+
+  // ── Bloque de evolución del ejercicio seleccionado ──
+  let evoHtml='';
+  if(progExSel){
+    const day=DAYS.find(d=>d.id===progExSel.dayId);
+    const ex=day?day.exercises.find(e=>e.id===progExSel.exId):null;
+    if(ex){
+      const s=parseInt(ex.series)||1;
+      const {pr,prWeek}=exPR(day.id,ex);
+      // Tabla: filas = series, columnas = semanas
+      let rows='';
+      for(let i=0;i<s;i++){
+        rows+=`<tr><td class="evo-set">Serie ${i+1}</td>`;
+        for(let wk=1;wk<=5;wk++){
+          const p=gd(wk,day.id,ex.id,'p'+i,'');
+          const isPR = p && parseFloat(p)===pr && pr>0;
+          rows+=`<td class="${isPR?'evo-pr':''}">${p?p:'·'}</td>`;
+        }
+        rows+=`</tr>`;
       }
-      exTable+=`</tr>`;
+      // Fila de máximo por semana
+      let maxRow='<tr class="evo-maxrow"><td class="evo-set">Máx.</td>';
+      for(let wk=1;wk<=5;wk++){
+        const m=exMaxWeight(wk,day.id,ex);
+        maxRow+=`<td>${m>0?m:'·'}</td>`;
+      }
+      maxRow+='</tr>';
+
+      evoHtml=`
+        <div class="evo-pr-badge">🏆 Récord: <strong>${pr>0?pr+' kg':'sin datos'}</strong>${pr>0?` (Semana ${prWeek})`:''}</div>
+        <div class="evo-scroll">
+        <table class="evo-table">
+          <thead><tr><th></th><th>S1</th><th>S2</th><th>S3</th><th>S4</th><th>S5</th></tr></thead>
+          <tbody>${rows}${maxRow}</tbody>
+        </table>
+        </div>
+        <p class="evo-note">Cada fila es una serie. Las celdas marcadas son tu récord en ese ejercicio.</p>
+      `;
+    }
+  }
+
+  // ── Récords personales de todos los ejercicios ──
+  let prHtml='';
+  DAYS.forEach(day=>{
+    let dayRows='';
+    day.exercises.forEach(ex=>{
+      const {pr,prWeek}=exPR(day.id,ex);
+      if(pr>0){
+        dayRows+=`<tr><td>${ex.name}</td><td class="pr-val">${pr} kg</td><td class="pr-week">Sem ${prWeek}</td></tr>`;
+      }
     });
-    exTable+=`</tbody></table>`;
+    if(dayRows){
+      prHtml+=`<p class="prog-day-label">${day.name.toUpperCase()} · ${day.muscle}</p>`;
+      prHtml+=`<table class="prog-table"><tbody>${dayRows}</tbody></table>`;
+    }
+  });
+  if(!prHtml) prHtml='<p class="evo-note" style="padding:8px 2px">Todavía no cargaste pesos. Tus récords van a aparecer acá a medida que entrenes.</p>';
+
+  // Mini gráfico de volumen por semana
+  let volBars='';
+  let volMax=0;
+  const vols=[];
+  for(let wk=1;wk<=5;wk++){const v=weekVolume(wk);vols.push(v);if(v>volMax)volMax=v;}
+  vols.forEach((v,i)=>{
+    const h=volMax>0?Math.round(v/volMax*60):0;
+    const lbl=v>=1000?(v/1000).toFixed(1)+'k':v;
+    volBars+=`<div class="bar-group"><div class="bar-val">${v>0?lbl:''}</div><div class="bar-wrap"><div class="bar" style="height:${v>0?Math.max(h,4):2}px"></div></div><div class="bar-lbl">S${i+1}</div></div>`;
   });
 
   document.getElementById('page-progreso').innerHTML=`
     <div class="stats-row">
       <div class="stat-box"><div class="stat-val">${pct}%</div><div class="stat-lbl">Completado S${w}</div></div>
       <div class="stat-box"><div class="stat-val">${done}</div><div class="stat-lbl">Series hechas</div></div>
-      <div class="stat-box"><div class="stat-val">${avgKg}</div><div class="stat-lbl">Kg promedio</div></div>
+      <div class="stat-box"><div class="stat-val">${volNow>=1000?(volNow/1000).toFixed(1)+'k':volNow}</div><div class="stat-lbl">Volumen S${w} (kg)</div></div>
     </div>
+
     <div class="section-card">
-      <h3>PESO PROMEDIO POR SEMANA</h3>
-      <div class="bar-chart">${bars}</div>
+      <h3>EVOLUCIÓN POR EJERCICIO</h3>
+      <select class="prog-select" onchange="const v=this.value.split('|');selectProgEx(v[0],v[1])">${exOptions}</select>
+      ${evoHtml}
     </div>
+
     <div class="section-card">
-      <h3>PROGRESIÓN POR EJERCICIO</h3>
-      ${exTable}
+      <h3>VOLUMEN TOTAL POR SEMANA</h3>
+      <div class="bar-chart">${volBars}</div>
+      <p class="evo-note">Volumen = peso × reps × series. Subir el volumen semana a semana es señal de progreso real.</p>
+    </div>
+
+    <div class="section-card">
+      <h3>🏆 RÉCORDS PERSONALES</h3>
+      ${prHtml}
     </div>
   `;
 }
