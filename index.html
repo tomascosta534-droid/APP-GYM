@@ -35,7 +35,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 
 /* NAV TABS */
 .nav{display:flex;background:var(--bg2);border-top:1px solid var(--border);padding:0 0 env(safe-area-inset-bottom,0);flex-shrink:0}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;border:none;background:none;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;transition:color .15s;-webkit-tap-highlight-color:transparent}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 2px;border:none;background:none;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:9px;cursor:pointer;transition:color .15s;-webkit-tap-highlight-color:transparent}
 .nav-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .nav-btn.active{color:var(--orange)}
 
@@ -246,6 +246,68 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .dsum-pend span:first-child{color:var(--text3)}
 .dsum-pend .dsum-w{color:var(--text3)}
 
+/* DASHBOARD / INICIO */
+.hero-greeting{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.5px;color:var(--text);margin-bottom:12px;padding:0 2px}
+.checkin-card h3{margin-bottom:12px}
+.checkin-idle,.checkin-active{display:flex;flex-direction:column;gap:8px}
+.checkin-active{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+.ci-info{font-size:13px;color:var(--text);line-height:1.5}
+.ci-info span{font-size:11px;color:var(--text2)}
+.ci-btn{padding:13px;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ci-in{background:var(--orange);color:#fff;width:100%}
+.ci-in:active{background:var(--orange-dark)}
+.ci-out{background:#E87070;color:#fff;flex-shrink:0;padding:11px 18px}
+.dash-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
+.dash-stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 10px;text-align:center}
+.ds-val{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--orange);line-height:1}
+.ds-lbl{font-size:11px;color:var(--text2);margin-top:4px}
+.obj-card{background:linear-gradient(135deg,rgba(31,86,115,.25),rgba(31,86,115,.08));border:1px solid rgba(31,86,115,.4);border-radius:var(--radius);padding:16px;margin-bottom:10px}
+.obj-head{font-size:11px;font-weight:600;letter-spacing:.8px;color:var(--orange);margin-bottom:8px}
+.obj-main{font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px}
+.obj-target{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.obj-cur{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--text2)}
+.obj-arrow{color:var(--text3);font-size:18px}
+.obj-goal{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--orange)}
+.obj-note{font-size:12px;color:var(--text2);line-height:1.5}
+.improved-box{display:flex;flex-direction:column;gap:4px}
+.improved-box strong{font-size:14px;color:var(--text)}
+.improved-box span{font-size:13px;color:var(--text2)}
+.ach-list{display:flex;flex-direction:column;gap:6px}
+.ach-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--radius-sm);background:var(--bg3);opacity:.5}
+.ach-item.ach-got{opacity:1;background:rgba(31,86,115,.12);border:1px solid rgba(31,86,115,.25)}
+.ach-icon{font-size:22px;flex-shrink:0}
+.ach-info{flex:1;display:flex;flex-direction:column;gap:1px}
+.ach-info strong{font-size:13px;color:var(--text)}
+.ach-info span{font-size:11px;color:var(--text2)}
+.ach-check{color:#6FCF76;font-size:16px;font-weight:700;flex-shrink:0}
+
+/* COACH - SUGERENCIAS */
+.sug-card{display:flex;gap:10px;padding:12px;border-radius:var(--radius-sm);margin-bottom:8px;align-items:flex-start}
+.sug-up{background:rgba(76,175,80,.1);border:1px solid rgba(76,175,80,.25)}
+.sug-down{background:rgba(231,112,112,.1);border:1px solid rgba(231,112,112,.25)}
+.sug-muscle{background:rgba(31,86,115,.12);border:1px solid rgba(31,86,115,.3)}
+.sug-icon{font-size:18px;flex-shrink:0;line-height:1.3}
+.sug-text{display:flex;flex-direction:column;gap:3px}
+.sug-text strong{font-size:13px;color:var(--text);font-weight:600}
+.sug-text span{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* COACH - CALENDARIO */
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.5px;color:var(--text)}
+.cal-nav{width:32px;height:32px;border:1px solid var(--border2);background:var(--bg3);border-radius:8px;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cal-nav:active{background:var(--bg4)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:14px}
+.cal-dow{text-align:center;font-size:10px;color:var(--text3);font-weight:600;padding:4px 0}
+.cal-empty{aspect-ratio:1}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text2);border-radius:8px;background:var(--bg3);position:relative}
+.cal-trained{background:var(--orange);color:#fff;font-weight:600}
+.cal-today{border:1.5px solid var(--orange)}
+.cal-trained.cal-today{border-color:#fff}
+.cal-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.cal-stat{background:var(--bg3);border-radius:var(--radius-sm);padding:10px 6px;text-align:center}
+.cal-stat-val{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--orange);line-height:1}
+.cal-stat-lbl{font-size:10px;color:var(--text2);margin-top:3px}
+
 /* MEDIDAS */
 .medidas-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .med-item{display:flex;flex-direction:column;gap:4px}
@@ -319,8 +381,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 
   <!-- SCROLL -->
   <div class="scroll" id="mainScroll">
+    <!-- INICIO / DASHBOARD -->
+    <div class="page active" id="page-inicio"></div>
     <!-- RUTINA PAGE -->
-    <div class="page active" id="page-rutina"></div>
+    <div class="page" id="page-rutina"></div>
     <!-- PROGRESO PAGE -->
     <div class="page" id="page-progreso"></div>
     <!-- MEDIDAS PAGE -->
@@ -333,7 +397,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 
   <!-- NAV -->
   <nav class="nav">
-    <button class="nav-btn active" onclick="switchPage('rutina',this)">
+    <button class="nav-btn active" onclick="switchPage('inicio',this)">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Inicio
+    </button>
+    <button class="nav-btn" onclick="switchPage('rutina',this)">
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
       Rutina
     </button>
@@ -509,6 +577,7 @@ function switchPage(name,btn){
   document.getElementById('page-'+name).classList.add('active');
   btn.classList.add('active');
   document.getElementById('mainScroll').scrollTop=0;
+  if(name==='inicio') renderInicio();
   if(name==='progreso') renderProgreso();
   if(name==='medidas') renderMedidas();
   if(name==='historial') renderHistorial();
@@ -635,6 +704,8 @@ function getDayPct(w,day){
 function isDayFinished(w,dayId){ return gd(w,dayId,'_day','fin','0')==='1'; }
 function finishDay(w,dayId){
   sd(w,dayId,'_day','fin','1');
+  // Registrar fecha de finalización (para el calendario)
+  if(gd(w,dayId,'_day','date','')==='') sd(w,dayId,'_day','date',new Date().toISOString());
   renderRutina();
 }
 function reopenDay(w,dayId){
@@ -796,6 +867,294 @@ function startRest(dayId,exId,total){
   };
   tick();
   restIntervalMap[key]=setInterval(tick,1000);
+}
+
+// ─── INICIO / DASHBOARD ───
+
+// Tiempo total entrenado (suma de sesiones con entrada y salida), en minutos
+function totalMinutesTrained(){
+  let mins=0;
+  for(let wk=1;wk<=5;wk++) DAYS.forEach(day=>{
+    const ci=gd(wk,day.id,'_day','checkin','');
+    const co=gd(wk,day.id,'_day','checkout','');
+    if(ci&&co){const diff=(new Date(co)-new Date(ci))/60000;if(diff>0&&diff<600)mins+=diff;}
+  });
+  return Math.round(mins);
+}
+
+// Peso total movido en la vida (suma de peso×reps de todas las series registradas)
+function totalWeightMoved(){
+  let total=0;
+  for(let wk=1;wk<=5;wk++) DAYS.forEach(day=>day.exercises.forEach(ex=>{
+    const s=parseInt(ex.series)||1;
+    const repsArr=(ex.reps||'').split(/[-/]/).map(r=>parseInt(r.trim())||0);
+    for(let i=0;i<s;i++){
+      const p=parseFloat(gd(wk,day.id,ex.id,'p'+i,''));
+      if(p>0){const reps=repsArr.length===1?(repsArr[0]||0):(repsArr[i]||repsArr[repsArr.length-1]||0);total+=p*reps;}
+    }
+  }));
+  return Math.round(total);
+}
+
+// Ejercicio más mejorado (mayor diferencia entre primera y última semana con datos)
+function mostImproved(){
+  let best=null;
+  DAYS.forEach(day=>day.exercises.forEach(ex=>{
+    let first=0,last=0,fw=0,lw=0;
+    for(let wk=1;wk<=5;wk++){const m=exMaxWeight(wk,day.id,ex);if(m>0){if(first===0){first=m;fw=wk;}last=m;lw=wk;}}
+    if(first>0&&lw>fw){const diff=last-first;if(!best||diff>best.diff){best={name:ex.name,diff,first,last};}}
+  }));
+  return best;
+}
+
+// Próximo récord posible: PR actual + incremento sugerido
+function nextPossiblePR(){
+  let bestPR=0,bestName='';
+  DAYS.forEach(day=>day.exercises.forEach(ex=>{
+    const {pr}=exPR(day.id,ex);
+    if(pr>bestPR){bestPR=pr;bestName=ex.name;}
+  }));
+  if(bestPR===0) return null;
+  const inc=bestPR>=50?5:2.5;
+  return {name:bestName,current:bestPR,target:bestPR+inc};
+}
+
+// Logros automáticos
+function getAchievements(){
+  const a=[];
+  const totalDays=countTotalTrained();
+  const streak=currentStreak();
+  const moved=totalWeightMoved();
+  const mins=totalMinutesTrained();
+
+  a.push({got:totalDays>=1,icon:'🎯',title:'Primer entrenamiento',desc:'Registraste tu primer día'});
+  a.push({got:totalDays>=10,icon:'🔥',title:'10 entrenamientos',desc:`${totalDays}/10 días registrados`});
+  a.push({got:totalDays>=25,icon:'💪',title:'25 entrenamientos',desc:`${totalDays}/25 días registrados`});
+  a.push({got:streak>=2,icon:'📅',title:'2 semanas seguidas',desc:'Constancia sostenida'});
+  a.push({got:streak>=4,icon:'🏅',title:'1 mes sin abandonar',desc:'4 semanas consecutivas'});
+  a.push({got:moved>=10000,icon:'🏋️',title:'10 toneladas movidas',desc:`${(moved/1000).toFixed(1)}t acumuladas`});
+  a.push({got:moved>=50000,icon:'🦣',title:'50 toneladas movidas',desc:`${(moved/1000).toFixed(1)}t acumuladas`});
+  // PR de press plano en hitos
+  let benchPR=0;
+  DAYS.forEach(day=>day.exercises.forEach(ex=>{if(/press plano|banca/i.test(ex.name)){const {pr}=exPR(day.id,ex);if(pr>benchPR)benchPR=pr;}}));
+  if(benchPR>0){
+    a.push({got:benchPR>=60,icon:'🛋️',title:'60kg en press plano',desc:benchPR>=60?'¡Logrado!':`Vas por ${benchPR}kg`});
+    a.push({got:benchPR>=80,icon:'⚡',title:'80kg en press plano',desc:benchPR>=80?'¡Logrado!':`Vas por ${benchPR}kg`});
+  }
+  if(mins>=600) a.push({got:true,icon:'⏱️',title:'10 horas de gym',desc:`${(mins/60).toFixed(0)}h acumuladas`});
+  return a;
+}
+
+function renderInicio(){
+  const w=state.week;
+
+  // ── Check-in de tiempo del día actual / hoy ──
+  // Buscar si hay una sesión abierta (checkin sin checkout) en cualquier día de la semana
+  let openSession=null;
+  DAYS.forEach(day=>{
+    const ci=gd(w,day.id,'_day','checkin','');
+    const co=gd(w,day.id,'_day','checkout','');
+    if(ci&&!co) openSession={dayId:day.id,name:day.name,ci};
+  });
+
+  let timeHtml='';
+  if(openSession){
+    const start=new Date(openSession.ci);
+    const hh=start.getHours().toString().padStart(2,'0'), mm=start.getMinutes().toString().padStart(2,'0');
+    timeHtml=`<div class="checkin-active">
+      <div class="ci-info">🟢 En el gym desde las ${hh}:${mm}<br><span>${openSession.name}</span></div>
+      <button class="ci-btn ci-out" onclick="checkOut('${openSession.dayId}')">Me fui</button>
+    </div>`;
+  } else {
+    // Selector de día para hacer check-in
+    let opts='';
+    DAYS.forEach(day=>opts+=`<option value="${day.id}">${day.name} · ${day.muscle}</option>`);
+    timeHtml=`<div class="checkin-idle">
+      <select id="checkinDay" class="prog-select" style="margin-bottom:8px">${opts}</select>
+      <button class="ci-btn ci-in" onclick="checkIn(document.getElementById('checkinDay').value)">🏋️ Entré al gym</button>
+    </div>`;
+  }
+
+  // ── Stats de motivación ──
+  const mins=totalMinutesTrained();
+  const horas=mins>=60?(mins/60).toFixed(1):'0';
+  const moved=totalWeightMoved();
+  const movedTxt=moved>=1000?(moved/1000).toFixed(1)+'t':moved+'kg';
+  const streak=currentStreak();
+  const improved=mostImproved();
+  const nextPR=nextPossiblePR();
+
+  // ── Objetivo sugerido ──
+  let objHtml='';
+  if(nextPR){
+    objHtml=`<div class="obj-card">
+      <div class="obj-head">🎯 PRÓXIMO OBJETIVO</div>
+      <div class="obj-main">${nextPR.name}</div>
+      <div class="obj-target"><span class="obj-cur">${nextPR.current}kg</span> <span class="obj-arrow">→</span> <span class="obj-goal">${nextPR.target}kg</span></div>
+      <div class="obj-note">Subí ${(nextPR.target-nextPR.current)} kg respecto a tu récord actual. Meta realista para las próximas 2-3 semanas.</div>
+    </div>`;
+  } else {
+    objHtml=`<div class="obj-card"><div class="obj-note" style="text-align:center;padding:8px">Cargá pesos en tus ejercicios para que la app te sugiera un objetivo personalizado.</div></div>`;
+  }
+
+  // ── Logros ──
+  const achievements=getAchievements();
+  let achHtml='';
+  achievements.forEach(a=>{
+    achHtml+=`<div class="ach-item${a.got?' ach-got':''}"><div class="ach-icon">${a.icon}</div><div class="ach-info"><strong>${a.title}</strong><span>${a.desc}</span></div>${a.got?'<div class="ach-check">✓</div>':''}</div>`;
+  });
+
+  // ── SUGERENCIAS (igual que antes) ──
+  const sugs=[];
+  DAYS.forEach(day=>day.exercises.forEach(ex=>{
+    const series=[];
+    for(let wk=1;wk<=5;wk++){const m=exMaxWeight(wk,day.id,ex);if(m>0)series.push(m);}
+    if(series.length>=3){
+      const last3=series.slice(-3);
+      if(last3[0]===last3[1] && last3[1]===last3[2]){
+        sugs.push({type:'up',icon:'⬆️',title:`Subí el peso en ${ex.name}`,text:`Llevás 3 semanas con ${last3[0]}kg. Tu cuerpo ya se adaptó: probá subir 2.5-5kg la próxima.`});
+      }
+    }
+  }));
+  DAYS.forEach(day=>day.exercises.forEach(ex=>{
+    for(let wk=2;wk<=5;wk++){
+      const cur=exMaxWeight(wk,day.id,ex);
+      const prev=exMaxWeight(wk-1,day.id,ex);
+      if(cur>0 && prev>0 && cur<prev){
+        sugs.push({type:'down',icon:'⚠️',title:`Bajó el peso en ${ex.name}`,text:`Semana ${wk-1}: ${prev}kg → Semana ${wk}: ${cur}kg. Puede ser fatiga o mala recuperación. Revisá descanso y alimentación.`});
+        break;
+      }
+    }
+  }));
+  DAYS.forEach(day=>{
+    let trained=false;
+    for(let wk=1;wk<=5;wk++){
+      if(isDayFinished(wk,day.id)){trained=true;break;}
+      if(day.exercises.some(ex=>exMaxWeight(wk,day.id,ex)>0)){trained=true;break;}
+    }
+    if(!trained){
+      sugs.push({type:'muscle',icon:'🎯',title:`${day.muscle} sin registrar`,text:`Todavía no entrenaste ${day.name} (${day.muscle}). No descuides este grupo para un desarrollo parejo.`});
+    }
+  });
+  let sugsHtml='';
+  if(sugs.length===0){
+    sugsHtml='<p class="evo-note" style="padding:8px 2px">Cuando tengas más semanas registradas, acá van a aparecer sugerencias: cuándo subir peso, alertas de bajones y grupos sin entrenar.</p>';
+  } else {
+    sugs.slice(0,5).forEach(s=>{
+      sugsHtml+=`<div class="sug-card sug-${s.type}"><div class="sug-icon">${s.icon}</div><div class="sug-text"><strong>${s.title}</strong><span>${s.text}</span></div></div>`;
+    });
+  }
+
+  // ── CALENDARIO ──
+  const trainedDates={};
+  for(let wk=1;wk<=5;wk++){
+    DAYS.forEach(day=>{
+      const ds=gd(wk,day.id,'_day','date','');
+      if(ds){const d=new Date(ds);trainedDates[`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`]=true;}
+    });
+  }
+  if(!window.coachMonth){const now=new Date();window.coachMonth={y:now.getFullYear(),m:now.getMonth()};}
+  const cy=window.coachMonth.y, cm=window.coachMonth.m;
+  const monthNames=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const startWeekday=(new Date(cy,cm,1).getDay()+6)%7;
+  const daysInMonth=new Date(cy,cm+1,0).getDate();
+  let trainedThisMonth=0;
+  for(let d=1;d<=daysInMonth;d++){if(trainedDates[`${cy}-${cm}-${d}`])trainedThisMonth++;}
+  let calCells='';
+  ['L','M','X','J','V','S','D'].forEach(d=>calCells+=`<div class="cal-dow">${d}</div>`);
+  for(let i=0;i<startWeekday;i++) calCells+=`<div class="cal-empty"></div>`;
+  const today=new Date();
+  for(let d=1;d<=daysInMonth;d++){
+    const trained=trainedDates[`${cy}-${cm}-${d}`];
+    const isToday=today.getFullYear()===cy&&today.getMonth()===cm&&today.getDate()===d;
+    calCells+=`<div class="cal-day${trained?' cal-trained':''}${isToday?' cal-today':''}">${d}</div>`;
+  }
+
+  document.getElementById('page-inicio').innerHTML=`
+    <div class="hero-greeting">${greeting()}, Tomás 👋</div>
+
+    <div class="section-card checkin-card">
+      <h3>⏱️ TIEMPO DE ENTRENAMIENTO</h3>
+      ${timeHtml}
+    </div>
+
+    <div class="dash-stats">
+      <div class="dash-stat"><div class="ds-val">${streak}</div><div class="ds-lbl">semanas de racha</div></div>
+      <div class="dash-stat"><div class="ds-val">${horas}</div><div class="ds-lbl">horas en el gym</div></div>
+      <div class="dash-stat"><div class="ds-val">${movedTxt}</div><div class="ds-lbl">peso total movido</div></div>
+      <div class="dash-stat"><div class="ds-val">${countTotalTrained()}</div><div class="ds-lbl">entrenamientos</div></div>
+    </div>
+
+    ${objHtml}
+
+    ${improved?`<div class="section-card">
+      <h3>📈 EJERCICIO MÁS MEJORADO</h3>
+      <div class="improved-box"><strong>${improved.name}</strong><span>${improved.first}kg → ${improved.last}kg <span class="diff-badge diff-up">+${improved.diff}kg</span></span></div>
+    </div>`:''}
+
+    <div class="section-card">
+      <h3>🏆 LOGROS</h3>
+      <div class="ach-list">${achHtml}</div>
+    </div>
+
+    <div class="section-card">
+      <h3>💡 SUGERENCIAS</h3>
+      ${sugsHtml}
+    </div>
+
+    <div class="section-card">
+      <h3>📅 CALENDARIO</h3>
+      <div class="cal-header">
+        <button class="cal-nav" onclick="coachMonthShift(-1)">‹</button>
+        <span class="cal-title">${monthNames[cm]} ${cy}</span>
+        <button class="cal-nav" onclick="coachMonthShift(1)">›</button>
+      </div>
+      <div class="cal-grid">${calCells}</div>
+      <div class="cal-summary">
+        <div class="cal-stat"><div class="cal-stat-val">${trainedThisMonth}</div><div class="cal-stat-lbl">días este mes</div></div>
+        <div class="cal-stat"><div class="cal-stat-val">${countTotalTrained()}</div><div class="cal-stat-lbl">total</div></div>
+        <div class="cal-stat"><div class="cal-stat-val">${streak}</div><div class="cal-stat-lbl">racha (sem)</div></div>
+      </div>
+    </div>
+  `;
+}
+
+function greeting(){
+  const h=new Date().getHours();
+  if(h<12) return 'Buen día';
+  if(h<20) return 'Buenas tardes';
+  return 'Buenas noches';
+}
+
+function checkIn(dayId){
+  sd(state.week,dayId,'_day','checkin',new Date().toISOString());
+  sd(state.week,dayId,'_day','checkout','');
+  renderInicio();
+}
+function checkOut(dayId){
+  sd(state.week,dayId,'_day','checkout',new Date().toISOString());
+  renderInicio();
+}
+
+function coachMonthShift(delta){
+  if(!window.coachMonth){const now=new Date();window.coachMonth={y:now.getFullYear(),m:now.getMonth()};}
+  let m=window.coachMonth.m+delta, y=window.coachMonth.y;
+  if(m<0){m=11;y--;} if(m>11){m=0;y++;}
+  window.coachMonth={y,m};
+  renderInicio();
+}
+function countTotalTrained(){
+  let n=0;
+  for(let wk=1;wk<=5;wk++) DAYS.forEach(day=>{if(gd(wk,day.id,'_day','date','')) n++;});
+  return n;
+}
+function currentStreak(){
+  let streak=0;
+  for(let wk=1;wk<=5;wk++){
+    const any=DAYS.some(day=>isDayFinished(wk,day.id));
+    if(any) streak++; else if(streak>0) break;
+  }
+  return streak;
 }
 
 // PROGRESO
@@ -1179,6 +1538,7 @@ function confirmReset(){
 
 // INIT
 load();
+renderInicio();
 renderRutina();
 </script>
 </body>
