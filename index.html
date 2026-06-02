@@ -167,6 +167,26 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 /* AEROBICO */
 .aerobico-bar{background:rgba(31,86,115,.08);border-top:1px solid rgba(31,86,115,.2);padding:10px 16px;text-align:center;font-size:11px;color:var(--orange);font-weight:500}
 
+/* SKIP & FINISH DAY */
+.skip-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:8px 12px;font-size:11px;font-weight:500;color:var(--text3);font-family:'DM Sans',sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent;flex-shrink:0;white-space:nowrap}
+.skip-btn.active{background:rgba(231,112,112,.15);border-color:rgba(231,112,112,.4);color:#E87070}
+.skip-btn:active{transform:scale(.96)}
+.set-filled .set-num{background:var(--orange);border-color:var(--orange);color:#fff}
+.set-filled .set-weight{border-color:rgba(31,86,115,.4)}
+.ex-skipped{opacity:.55}
+.ex-skipped .sets-list{display:none}
+.ex-skipped .inp-time{display:none}
+.skip-tag{font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(231,112,112,.15);color:#E87070;font-weight:500;white-space:nowrap}
+.day-finish-block{padding:12px 16px calc(env(safe-area-inset-bottom,0) + 4px);display:flex;flex-direction:column;gap:10px}
+.finish-day-btn{width:100%;padding:13px;background:var(--orange);color:#fff;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.finish-day-btn:active{background:var(--orange-dark)}
+.reopen-day-btn{width:100%;padding:11px;background:var(--bg3);color:var(--text2);border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer}
+.day-finish-summary{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.dfs-item{font-size:12px;padding:5px 11px;border-radius:20px;font-weight:600}
+.dfs-done{background:rgba(76,175,80,.15);color:#6FCF76}
+.dfs-skip{background:rgba(231,112,112,.15);color:#E87070}
+.dfs-pend{background:var(--bg4);color:var(--text2)}
+
 /* PROGRESO PAGE */
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
 .stat-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 8px;text-align:center}
@@ -208,6 +228,23 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .evo-note{font-size:11px;color:var(--text3);margin-top:8px;line-height:1.5}
 .pr-val{color:var(--orange)!important;font-weight:600;text-align:right;font-size:13px!important}
 .pr-week{color:var(--text3)!important;text-align:right;width:50px;font-size:11px!important}
+
+/* RESUMEN POR DÍA */
+.dsum-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:10px;overflow:hidden}
+.dsum-head{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border)}
+.dsum-muscle{flex:1;font-size:12px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dsum-pct{font-size:13px;font-weight:600;color:var(--text2)}
+.dsum-pct.full{color:#6FCF76}
+.dsum-body{padding:6px 12px 10px}
+.dsum-ex{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:5px 0;font-size:12px;border-bottom:1px solid var(--border)}
+.dsum-ex:last-child{border-bottom:none}
+.dsum-w{font-size:11px;flex-shrink:0}
+.dsum-done span:first-child{color:var(--text)}
+.dsum-done .dsum-w{color:#6FCF76;font-weight:600}
+.dsum-skip span:first-child{color:var(--text2)}
+.dsum-skip .dsum-w{color:#E87070}
+.dsum-pend span:first-child{color:var(--text3)}
+.dsum-pend .dsum-w{color:var(--text3)}
 
 /* MEDIDAS */
 .medidas-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -577,13 +614,32 @@ function ring(pct){
 }
 
 // COMPLETION
+// Estado de un ejercicio en una semana: 'done' (cargó peso en al menos 1 serie), 'skip' (marcado no hice), 'pending' (nada)
+function exStatus(w,dayId,ex){
+  if(gd(w,dayId,ex.id,'skip','0')==='1') return 'skip';
+  const s=parseInt(ex.series)||1;
+  for(let i=0;i<s;i++){ if(gd(w,dayId,ex.id,'p'+i,'')!=='') return 'done'; }
+  return 'pending';
+}
+
+// % del día = ejercicios hechos / total. Los saltados cuentan como "no hechos".
 function getDayPct(w,day){
-  let tot=0,done=0;
-  day.exercises.forEach(ex=>{
-    const s=parseInt(ex.series)||1;
-    for(let i=0;i<s;i++){tot++;if(gd(w,day.id,ex.id,'s'+i,'0')==='1') done++;}
-  });
-  return tot===0?0:Math.round(done/tot*100);
+  const total=day.exercises.length;
+  if(total===0) return 0;
+  let done=0;
+  day.exercises.forEach(ex=>{ if(exStatus(w,day.id,ex)==='done') done++; });
+  return Math.round(done/total*100);
+}
+
+// ¿El día está marcado como finalizado?
+function isDayFinished(w,dayId){ return gd(w,dayId,'_day','fin','0')==='1'; }
+function finishDay(w,dayId){
+  sd(w,dayId,'_day','fin','1');
+  renderRutina();
+}
+function reopenDay(w,dayId){
+  sd(w,dayId,'_day','fin','0');
+  renderRutina();
 }
 
 // RENDER RUTINA
@@ -612,9 +668,10 @@ function renderRutina(){
     const pct=getDayPct(state.week,day);
     const card=document.createElement('div');
     card.className='day-card';
+    const fin=isDayFinished(state.week,day.id);
     let html=`<div class="day-header" onclick="toggleDay('${day.id}')">
       <div class="day-badge">${day.name.toUpperCase()}</div>
-      <div class="day-info"><h2>${day.muscle}</h2><p>${day.exercises.length} ejercicios · ${day.exercises.reduce((a,e)=>a+parseInt(e.series),0)} series</p></div>
+      <div class="day-info"><h2>${day.muscle}</h2><p>${day.exercises.length} ejercicios · ${day.exercises.reduce((a,e)=>a+parseInt(e.series),0)} series${fin?' · ✓ terminado':''}</p></div>
       ${ring(pct)}
       <svg class="day-chevron${open?' open':''}" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
     </div>`;
@@ -626,6 +683,24 @@ function renderRutina(){
       html+=`</div></div></div>`;
       day.exercises.forEach(ex=>{ html+=renderEx(day.id,ex); });
       html+=`<div class="aerobico-bar">⚡ 5 min aeróbico al finalizar · bici · skipping · soga</div>`;
+      // Botón terminar día / resumen
+      const fin=isDayFinished(state.week,day.id);
+      let doneN=0,skipN=0,pendN=0;
+      day.exercises.forEach(ex=>{const st=exStatus(state.week,day.id,ex);if(st==='done')doneN++;else if(st==='skip')skipN++;else pendN++;});
+      if(fin){
+        html+=`<div class="day-finish-block">
+          <div class="day-finish-summary">
+            <span class="dfs-item dfs-done">✓ ${doneN} hechos</span>
+            ${skipN>0?`<span class="dfs-item dfs-skip">✕ ${skipN} salteados</span>`:''}
+            ${pendN>0?`<span class="dfs-item dfs-pend">○ ${pendN} sin registrar</span>`:''}
+          </div>
+          <button class="reopen-day-btn" onclick="reopenDay(${state.week},'${day.id}')">Reabrir día</button>
+        </div>`;
+      } else {
+        html+=`<div class="day-finish-block">
+          <button class="finish-day-btn" onclick="finishDay(${state.week},'${day.id}')">✓ Terminar día (Semana ${state.week})</button>
+        </div>`;
+      }
     }
     card.innerHTML=html;
     c.appendChild(card);
@@ -637,15 +712,15 @@ function renderEx(dayId,ex){
   const s=parseInt(ex.series)||1;
   const tiempo=gd(w,d,e,'tiempo','');
   const nota=gd(w,d,e,'nota','');
+  const skipped=gd(w,d,e,'skip','0')==='1';
   // Parse reps por serie (ej "15-12-10-8" => [15,12,10,8])
   const repsArr=(ex.reps||'').split(/[-/]/).map(r=>r.trim());
 
-  // Filas de series: cada una con su peso, reps objetivo, peso semana anterior y check
+  // Filas de series: cada una con su peso, reps objetivo, peso semana anterior
   let setsHtml='';
   for(let i=0;i<s;i++){
     const peso=gd(w,d,e,'p'+i,'');
     const prevPeso=w>1?gd(w-1,d,e,'p'+i,''):'';
-    const done=gd(w,d,e,'s'+i,'0')==='1';
     const repTarget=repsArr.length===1?repsArr[0]:(repsArr[i]||repsArr[repsArr.length-1]||'');
     let prevTag='';
     if(prevPeso){
@@ -653,16 +728,16 @@ function renderEx(dayId,ex){
       if(peso){const dv=parseFloat(peso)-parseFloat(prevPeso);cls=dv>0?'prev-up':dv<0?'prev-dn':'prev-same';}
       prevTag=`<span class="prev-weight ${cls}">ant: ${prevPeso}kg</span>`;
     }
-    setsHtml+=`<div class="set-line${done?' set-done':''}">
-      <div class="set-num" onclick="toggleSet('${d}','${e}',${i},this)">${done?'✓':(i+1)}</div>
+    setsHtml+=`<div class="set-line${peso?' set-filled':''}">
+      <div class="set-num">${i+1}</div>
       <div class="set-rep">${repTarget?repTarget+' reps':''}</div>
-      <input class="set-weight" type="number" inputmode="decimal" step="0.5" placeholder="kg" value="${peso}" onchange="sd(${w},'${d}','${e}','p${i}',this.value);renderRutina()">
+      <input class="set-weight" type="number" inputmode="decimal" step="0.5" placeholder="kg" value="${peso}" onchange="onWeightChange(${w},'${d}','${e}','p${i}',this.value)">
       ${prevTag}
     </div>`;
   }
 
-  return `<div class="exercise">
-    <div class="ex-name">${ex.name}${ex.tag?`<span class="ex-tag">${ex.tag}</span>`:''}</div>
+  return `<div class="exercise${skipped?' ex-skipped':''}">
+    <div class="ex-name">${ex.name}${ex.tag?`<span class="ex-tag">${ex.tag}</span>`:''}${skipped?'<span class="skip-tag">No lo hice</span>':''}</div>
     <div class="ex-meta">${ex.series} series · ${ex.reps}</div>
     <div class="sets-list">${setsHtml}</div>
     <div class="ex-bottom">
@@ -670,6 +745,9 @@ function renderEx(dayId,ex){
       <button class="rest-btn" id="rb_${d}_${e}" ontouchstart="" onclick="startRest('${d}','${e}',${ex.rest})">
         <svg class="rest-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         <span id="rt_${d}_${e}">${ex.rest}s</span>
+      </button>
+      <button class="skip-btn${skipped?' active':''}" onclick="toggleSkip(${w},'${d}','${e}')" title="Marcar como no hecho">
+        ${skipped?'↩ Deshacer':'No lo hice'}
       </button>
     </div>
     <textarea class="ex-notes" rows="1" placeholder="Notas del ejercicio..." onchange="sd(${w},'${d}','${e}','nota',this.value)">${nota}</textarea>
@@ -681,15 +759,18 @@ function toggleDay(id){
   renderRutina();
 }
 
-function toggleSet(dayId,exId,idx,el){
-  const w=state.week;
-  const cur=gd(w,dayId,exId,'s'+idx,'0');
-  const nv=cur==='1'?'0':'1';
-  sd(w,dayId,exId,'s'+idx,nv);
+function onWeightChange(w,dayId,exId,key,val){
+  sd(w,dayId,exId,key,val);
+  // Si cargás peso, deja de estar "saltado"
+  if(val && gd(w,dayId,exId,'skip','0')==='1') sd(w,dayId,exId,'skip','0');
   renderRutina();
 }
 
-function refreshDiff(dayId,exId){renderRutina();}
+function toggleSkip(w,dayId,exId){
+  const cur=gd(w,dayId,exId,'skip','0');
+  sd(w,dayId,exId,'skip',cur==='1'?'0':'1');
+  renderRutina();
+}
 
 let restIntervalMap={};
 function startRest(dayId,exId,total){
@@ -761,13 +842,13 @@ function selectProgEx(dayId,exId){
 function renderProgreso(){
   const w=state.week;
 
-  // ── Stats de la semana actual ──
-  let tot=0,done=0;
+  // ── Stats de la semana actual: ejercicios hechos sobre total ──
+  let totEx=0,doneEx=0;
   DAYS.forEach(day=>day.exercises.forEach(ex=>{
-    const s=parseInt(ex.series)||1;
-    for(let i=0;i<s;i++){tot++;if(gd(w,day.id,ex.id,'s'+i,'0')==='1') done++;}
+    totEx++;
+    if(exStatus(w,day.id,ex)==='done') doneEx++;
   }));
-  const pct=tot>0?Math.round(done/tot*100):0;
+  const pct=totEx>0?Math.round(doneEx/totEx*100):0;
 
   // Volumen total de la semana (peso × reps × series completadas, aprox usando reps objetivo)
   function weekVolume(wk){
@@ -869,11 +950,38 @@ function renderProgreso(){
     volBars+=`<div class="bar-group"><div class="bar-val">${v>0?lbl:''}</div><div class="bar-wrap"><div class="bar" style="height:${v>0?Math.max(h,4):2}px"></div></div><div class="bar-lbl">S${i+1}</div></div>`;
   });
 
+  // ── Resumen por día de la semana actual ──
+  let daysHtml='';
+  DAYS.forEach(day=>{
+    const dpct=getDayPct(w,day);
+    const fin=isDayFinished(w,day.id);
+    let doneList='',skipList='',pendList='';
+    day.exercises.forEach(ex=>{
+      const st=exStatus(w,day.id,ex);
+      if(st==='done'){const mx=exMaxWeight(w,day.id,ex);doneList+=`<div class="dsum-ex dsum-done"><span>✓ ${ex.name}</span><span class="dsum-w">${mx>0?mx+' kg':''}</span></div>`;}
+      else if(st==='skip') skipList+=`<div class="dsum-ex dsum-skip"><span>✕ ${ex.name}</span><span class="dsum-w">no lo hice</span></div>`;
+      else pendList+=`<div class="dsum-ex dsum-pend"><span>○ ${ex.name}</span><span class="dsum-w">sin registrar</span></div>`;
+    });
+    daysHtml+=`<div class="dsum-card">
+      <div class="dsum-head">
+        <span class="day-badge">${day.name.toUpperCase()}</span>
+        <span class="dsum-muscle">${day.muscle}</span>
+        <span class="dsum-pct${dpct===100?' full':''}">${dpct}%${fin?' ✓':''}</span>
+      </div>
+      <div class="dsum-body">${doneList}${skipList}${pendList}</div>
+    </div>`;
+  });
+
   document.getElementById('page-progreso').innerHTML=`
     <div class="stats-row">
-      <div class="stat-box"><div class="stat-val">${pct}%</div><div class="stat-lbl">Completado S${w}</div></div>
-      <div class="stat-box"><div class="stat-val">${done}</div><div class="stat-lbl">Series hechas</div></div>
+      <div class="stat-box"><div class="stat-val">${pct}%</div><div class="stat-lbl">Día completado S${w}</div></div>
+      <div class="stat-box"><div class="stat-val">${doneEx}/${totEx}</div><div class="stat-lbl">Ejercicios hechos</div></div>
       <div class="stat-box"><div class="stat-val">${volNow>=1000?(volNow/1000).toFixed(1)+'k':volNow}</div><div class="stat-lbl">Volumen S${w} (kg)</div></div>
+    </div>
+
+    <div class="section-card">
+      <h3>RESUMEN DE LA SEMANA ${w}</h3>
+      ${daysHtml}
     </div>
 
     <div class="section-card">
@@ -923,20 +1031,20 @@ function renderHistorial(){
       const pmax=exMaxWeight(wk,day.id,ex);
       const t=gd(wk,day.id,ex.id,'tiempo','');
       const n=gd(wk,day.id,ex.id,'nota','');
-      let done=0;const s=parseInt(ex.series)||1;
-      for(let i=0;i<s;i++) if(gd(wk,day.id,ex.id,'s'+i,'0')==='1') done++;
-      if(wtext!=='-'||t||n||done>0){
+      const st=exStatus(wk,day.id,ex);
+      const estado=st==='done'?'✓ Hecho':st==='skip'?'✕ No lo hice':'○ Pendiente';
+      if(wtext!=='-'||t||n||st!=='pending'){
         cnt++;
         const prevMax=wk>1?exMaxWeight(wk-1,day.id,ex):0;
         let diff='';
         if(prevMax>0&&pmax>0){const dv=pmax-prevMax;if(dv>0) diff=`<span class="diff-badge diff-up">+${dv.toFixed(1)}</span>`;else if(dv<0) diff=`<span class="diff-badge diff-dn">${dv.toFixed(1)}</span>`;}
-        rows+=`<tr><td>${ex.name}</td><td>${wtext!=='-'?wtext+' kg':'-'} ${diff}</td><td>${t?t+'s':'-'}</td><td>${done}/${s}</td><td>${n||'-'}</td></tr>`;
+        rows+=`<tr><td>${ex.name}</td><td>${wtext!=='-'?wtext+' kg':'-'} ${diff}</td><td>${t?t+'s':'-'}</td><td>${estado}</td><td>${n||'-'}</td></tr>`;
       }
     }));
     if(cnt>0){
       any=true;
       html+=`<div class="hist-week"><div class="hist-week-header"><h3>SEMANA ${wk}</h3><span class="hist-count">${cnt} registros</span></div>
-      <table class="hist-table"><thead><tr><th>Ejercicio</th><th>Peso</th><th>Tiempo</th><th>Series</th><th>Notas</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+      <table class="hist-table"><thead><tr><th>Ejercicio</th><th>Peso</th><th>Tiempo</th><th>Estado</th><th>Notas</th></tr></thead><tbody>${rows}</tbody></table></div>`;
     }
   }
   if(!any) html=`<div class="empty-state"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg><p>Todavía no hay nada registrado.<br>Completá series en la pestaña Rutina.</p></div>`;
