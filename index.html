@@ -257,6 +257,16 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .ci-in{background:var(--orange);color:#fff;width:100%}
 .ci-in:active{background:var(--orange-dark)}
 .ci-out{background:#E87070;color:#fff;flex-shrink:0;padding:11px 18px}
+.ci-manual-toggle{background:transparent;border:none;color:var(--text2);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;padding:8px;text-decoration:underline;-webkit-tap-highlight-color:transparent}
+.manual-session{display:none;flex-direction:column;gap:8px;margin-top:4px;padding:12px;background:var(--bg3);border-radius:var(--radius-sm);border:1px solid var(--border2)}
+.manual-session.open{display:flex}
+.ms-row{display:flex;align-items:center;gap:10px}
+.ms-row label{font-size:12px;color:var(--text2);width:60px;flex-shrink:0}
+.ms-input{flex:1;background:var(--bg);border:1px solid var(--border2);border-radius:var(--radius-xs);padding:8px 10px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;-webkit-appearance:none}
+.ms-input:focus{outline:none;border-color:var(--orange)}
+.ms-msg{font-size:12px;text-align:center;min-height:16px;margin:0}
+.ms-msg.ok{color:#6FCF76}
+.ms-msg.err{color:#E87070}
 .dash-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
 .dash-stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 10px;text-align:center}
 .ds-val{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--orange);line-height:1}
@@ -966,12 +976,21 @@ function renderInicio(){
       <button class="ci-btn ci-out" onclick="checkOut('${openSession.dayId}')">Me fui</button>
     </div>`;
   } else {
-    // Selector de día para hacer check-in
     let opts='';
     DAYS.forEach(day=>opts+=`<option value="${day.id}">${day.name} · ${day.muscle}</option>`);
+    const todayStr=new Date().toISOString().slice(0,10);
     timeHtml=`<div class="checkin-idle">
       <select id="checkinDay" class="prog-select" style="margin-bottom:8px">${opts}</select>
       <button class="ci-btn ci-in" onclick="checkIn(document.getElementById('checkinDay').value)">🏋️ Entré al gym</button>
+      <button class="ci-manual-toggle" onclick="document.getElementById('manualSession').classList.toggle('open')">✏️ Cargar sesión manual (ej. la de ayer)</button>
+      <div class="manual-session" id="manualSession">
+        <div class="ms-row"><label>Día</label><select id="msDay" class="ms-input">${opts}</select></div>
+        <div class="ms-row"><label>Fecha</label><input type="date" id="msDate" class="ms-input" value="${todayStr}" max="${todayStr}"></div>
+        <div class="ms-row"><label>Entrada</label><input type="time" id="msIn" class="ms-input" value="18:00"></div>
+        <div class="ms-row"><label>Salida</label><input type="time" id="msOut" class="ms-input" value="19:30"></div>
+        <button class="ci-btn ci-in" style="margin-top:4px" onclick="saveManualSession()">Guardar sesión</button>
+        <p class="ms-msg" id="msMsg"></p>
+      </div>
     </div>`;
   }
 
@@ -1134,6 +1153,24 @@ function checkIn(dayId){
 function checkOut(dayId){
   sd(state.week,dayId,'_day','checkout',new Date().toISOString());
   renderInicio();
+}
+
+function saveManualSession(){
+  const dayId=document.getElementById('msDay').value;
+  const dateStr=document.getElementById('msDate').value;
+  const inStr=document.getElementById('msIn').value;
+  const outStr=document.getElementById('msOut').value;
+  const msg=document.getElementById('msMsg');
+  if(!dateStr||!inStr||!outStr){if(msg){msg.className='ms-msg err';msg.textContent='Completá fecha, entrada y salida.';}return;}
+  const ci=new Date(`${dateStr}T${inStr}`);
+  const co=new Date(`${dateStr}T${outStr}`);
+  if(co<=ci){if(msg){msg.className='ms-msg err';msg.textContent='La salida tiene que ser después de la entrada.';}return;}
+  sd(state.week,dayId,'_day','checkin',ci.toISOString());
+  sd(state.week,dayId,'_day','checkout',co.toISOString());
+  // También marca el día como entrenado en el calendario si no tenía fecha
+  if(gd(state.week,dayId,'_day','date','')==='') sd(state.week,dayId,'_day','date',ci.toISOString());
+  if(msg){msg.className='ms-msg ok';msg.textContent='✓ Sesión guardada.';}
+  setTimeout(()=>renderInicio(),700);
 }
 
 function coachMonthShift(delta){
