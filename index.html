@@ -821,7 +821,8 @@ function renderEditor(){
             <div style="flex:1"><div class="ed-field-label">Desc. (s)</div><input type="number" value="${ex.rest||''}" placeholder="60" oninput="editorDraft[${di}].exercises[${ei}].rest=parseInt(this.value)||60"></div>
           </div>
           <div><div class="ed-field-label">Etiqueta (opcional)</div><input value="${(ex.tag||'').replace(/"/g,'&quot;')}" placeholder="Dropset / Bi-serie..." oninput="editorDraft[${di}].exercises[${ei}].tag=this.value"></div>
-          <label class="ed-bi-toggle"><input type="checkbox" ${isBiserie(ex)?'checked':''} onchange="editorDraft[${di}].exercises[${ei}].bi=this.checked"> Bi-serie (2 pesos: dos ejercicios)</label>
+          <label class="ed-bi-toggle"><input type="checkbox" ${isBiserie(ex)?'checked':''} onchange="editorDraft[${di}].exercises[${ei}].bi=this.checked;editorDraft[${di}].exercises[${ei}].drop=false;renderEditor()"> Bi-serie (2 ejercicios: peso A + peso B)</label>
+          <label class="ed-bi-toggle"><input type="checkbox" ${isDropset(ex)?'checked':''} onchange="editorDraft[${di}].exercises[${ei}].drop=this.checked;editorDraft[${di}].exercises[${ei}].bi=false;renderEditor()"> Dropset (2 pesos: inicial + drop)</label>
         </div>
         <button class="ed-ex-del" onclick="delEx(${di},${ei})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
       </div>`;
@@ -981,10 +982,14 @@ function renderRutina(){
 // ¿Es bi-serie? Auto-detecta por nombre o por flag manual ex.bi
 function isBiserie(ex){
   if(ex.bi===true) return true;
-  if(ex.bi===false) return false; // desactivado manualmente
+  if(ex.bi===false) return false;
   return /bi[\s\-]?serie/i.test(ex.name||'');
 }
-// Extrae los dos nombres de una bi-serie ("BI-SERIE: Prensa + Extensión" → ["Prensa","Extensión"])
+function isDropset(ex){
+  if(ex.drop===true) return true;
+  if(ex.drop===false) return false;
+  return /dropset/i.test(ex.tag||'') || /dropset/i.test(ex.name||'');
+}
 function biserieNames(ex){
   let n=(ex.name||'').replace(/bi[\s\-]?serie\s*:?\s*/i,'');
   const parts=n.split(/\s*\+\s*/);
@@ -1000,13 +1005,16 @@ function renderEx(dayId,ex){
   const skipped=gd(w,d,e,'skip','0')==='1';
   const repsArr=(ex.reps||'').split(/[-/]/).map(r=>r.trim());
   const bi=isBiserie(ex);
+  const drop=!bi&&isDropset(ex);
   const biNames=bi?biserieNames(ex):null;
 
   let setsHtml='';
   if(bi){
-    // Encabezado con los dos nombres
     setsHtml+=`<div class="bi-head"><span class="bi-label-a">${biNames[0]}</span><span class="bi-label-b">${biNames[1]}</span></div>`;
+  } else if(drop){
+    setsHtml+=`<div class="bi-head"><span class="bi-label-a">Peso inicial</span><span class="bi-label-b">Peso drop</span></div>`;
   }
+
   for(let i=0;i<s;i++){
     const peso=gd(w,d,e,'p'+i,'');
     const prevPeso=w>1?gd(w-1,d,e,'p'+i,''):'';
@@ -1017,8 +1025,8 @@ function renderEx(dayId,ex){
       if(peso){const dv=parseFloat(peso)-parseFloat(prevPeso);cls=dv>0?'prev-up':dv<0?'prev-dn':'prev-same';}
       prevTag=`<span class="prev-weight ${cls}">ant: ${prevPeso}</span>`;
     }
-    if(bi){
-      // Dos inputs de peso: p{i} (A) y pb{i} (B)
+
+    if(bi||drop){
       const pesoB=gd(w,d,e,'pb'+i,'');
       const prevB=w>1?gd(w-1,d,e,'pb'+i,''):'';
       let prevTagB='';
@@ -1383,8 +1391,11 @@ function greeting(){
 }
 
 function checkIn(dayId){
-  sd(state.week,dayId,'_day','checkin',new Date().toISOString());
+  const now=new Date().toISOString();
+  sd(state.week,dayId,'_day','checkin',now);
   sd(state.week,dayId,'_day','checkout','');
+  // Siempre actualizar la fecha del calendario con la fecha real del checkin
+  sd(state.week,dayId,'_day','date',now);
   renderInicio();
 }
 function checkOut(dayId){
@@ -1404,9 +1415,11 @@ function saveManualSession(){
   if(co<=ci){if(msg){msg.className='ms-msg err';msg.textContent='La salida tiene que ser después de la entrada.';}return;}
   sd(state.week,dayId,'_day','checkin',ci.toISOString());
   sd(state.week,dayId,'_day','checkout',co.toISOString());
-  // También marca el día como entrenado en el calendario si no tenía fecha
-  if(gd(state.week,dayId,'_day','date','')==='') sd(state.week,dayId,'_day','date',ci.toISOString());
-  if(msg){msg.className='ms-msg ok';msg.textContent='✓ Sesión guardada.';}
+  // Siempre usar la fecha real de la sesión para el calendario (no importa si ya había una)
+  sd(state.week,dayId,'_day','date',ci.toISOString());
+  // También marcar como día terminado si no estaba
+  if(gd(state.week,dayId,'_day','fin','0')==='0') sd(state.week,dayId,'_day','fin','1');
+  if(msg){msg.className='ms-msg ok';msg.textContent='✓ Sesión guardada y marcada en el calendario.';}
   setTimeout(()=>renderInicio(),700);
 }
 
@@ -1449,11 +1462,11 @@ function exMaxWeight(w,dayId,ex){
 // Lista de pesos por serie como texto. Para bi-series muestra "A/B".
 function exWeightsText(w,dayId,ex){
   const s=parseInt(ex.series)||1;
-  const bi=isBiserie(ex);
+  const dual=isBiserie(ex)||isDropset(ex);
   const arr=[];
   for(let i=0;i<s;i++){
     const p=gd(w,dayId,ex.id,'p'+i,'');
-    if(bi){
+    if(dual){
       const pb=gd(w,dayId,ex.id,'pb'+i,'');
       if(p||pb) arr.push(`${p||'-'}/${pb||'-'}`); else arr.push('-');
     } else {
